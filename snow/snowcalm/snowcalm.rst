@@ -4,21 +4,25 @@
 Self-Service with ServiceNow
 ----------------------------
 
-As covered in other Nutanix Bootcamps, Calm and Prism Central provide native capabilities...
+As covered in other Nutanix Bootcamps, Calm and Prism Central deliver native self-service for VM provisioning by publishing Blueprints to the Calm Marketplace, and entitling certain groups of users with the ability to provision the published Blueprints.
 
-ServiceNow...
+Many organizations require additional levels of control to enforce automated or manual approvals processes over requests for virtual infrastructure. Party Time, Excellent Inc. has existing investments in ServiceNow, leveraging it to provide their employees with a service catalog to fulfill both IT and HR requests.
+
+In this exercise, you will show how you can integrate your multi-cluster Nutanix environment to allow PTE users to request virtual infrastructure via ServiceNow.
 
 Your Environment
 ++++++++++++++++
 
-To save time, and to ensure a consistent configuration for all users within the shared environment, your ServiceNow Developer Instance *has already been pre-staged with all components necessary to complete the following exercise*, including:
+.. raw:: html
+
+   <strong><font color="red">To save time, and to ensure a consistent configuration for all users within the shared environment, your ServiceNow Developer Instance has already been pre-staged with all components necessary to complete the following exercise, including:</font></strong><br><br>
 
 Local User Accounts and Group
 .............................
 
 To integrate with LDAP, ServiceNow requires connectivity to your on-prem Active Directory environment through either VPN or utilizing a read-only Domain Controller in your network's DMZ. As this is not possible within the HPOC environment, you will utilize local accounts (**user01**, **user02**, etc.) that have been pre-created within ServiceNow.
 
-These local user accounts have all been added to the User Group: **Calm Users**. The group has been assigned the ServiceNow Role: **x_nuta2_nutanix_ca.user**. Users need to be assigned this specific role in order appear within the Calm Plug-in as eligible for being assigned access to Blueprint Catalog Items.
+These local user accounts have all been added to the User Group: **Calm Users**. The group has been assigned the ServiceNow Role: **x_nuta2_nutanix_ca.user**. Users need to be assigned this specific role in order to appear within the Calm Plug-in as eligible for being assigned access to Blueprint Catalog Items.
 
 .. figure:: images/27.png
 
@@ -40,12 +44,12 @@ The `Nutanix Calm Plugin for Application Life Cycle Management <https://store.se
 
 .. figure:: images/30.png
 
-Automated installation via the Store requires the customer have access to their `ServiceNow HI Credentials <https://support.servicenow.com/kb?id=kb_article_view&sysparm_article=KB0781690>`_. The plugin can also be installed manually via .xml files for supporting POCs, Bootcamps, etc. and is how the **SNOW-Deployerizer** Blueprint has staged this environment.
+Automated installation via the Store requires the customer have access to their `ServiceNow HI Credentials <https://support.servicenow.com/kb?id=kb_article_view&sysparm_article=KB0781690>`_. The plugin can also be installed manually via .xml files for supporting POCs, Bootcamps, etc. and is how the **SNOW-Paris** Blueprint has staged this environment.
 
 Nutanix Calm Plugin Configuration
 ++++++++++++++++++++++++++++++++++
 
-#. Refer to :ref:`clusterdetails` for your ServiceNow Developer Instance URL and credentials.
+#. Refer to :ref:`clusterdetails` for your **ServiceNow Instance URL** and credentials.
 
 #. In a new browser tab, log in to your ServiceNow Developer Instance using the provided **admin** credential.
 
@@ -55,9 +59,13 @@ Nutanix Calm Plugin Configuration
 
    .. figure:: images/1.png
 
-#. Review the basic connectivity settings that have already been configured. *Do not edit any of these values.*
+#. Review the basic connectivity settings that have already been configured. The key fields required to connect the ServiceNow instance are the **Prism Central** URL, credentials, and name of the MID Server running on the Nutanix cluster.
 
-#. The plugin will periodically sync with Prism Central to update Blueprints, Projects, etc., however as you just created both your Porject and Blueprint, you can force a sync by clicking the **Sync Now** button at the bottom of **Application Properties**. Click **OK** to begin the sync.
+.. raw:: html
+
+   <strong><font color="red">DO NOT EDIT ANY OF THESE VALUES.</font></strong><br><br>
+
+#. The plugin will periodically sync with Prism Central to update Blueprints, Projects, etc., however as you just created both your Project and Blueprint, you can force a sync by clicking the **Sync Now** button at the bottom of **Application Properties**. Click **OK** to begin the sync.
 
    .. figure:: images/5.png
 
@@ -65,7 +73,7 @@ Nutanix Calm Plugin Configuration
 
       While the sync is taking place, users may experience issues trying to create catalog items and launch Blueprints. As multiple users will be sharing a cluster and working on the lab simultaneously, you may need to re-attempt these actions if the conflict with another user beginning a sync. The sync typically only takes ~1 minute, so this should not cause any serious disruption. Take a minute to stand up from your desk, stretch, and try again!
 
-#. While your inventory sync is in process, return to the **Application Properties** page.
+#. While your inventory sync is in process, return to the **Nutanix Calm > Application Properties** page.
 
 #. Under **Configuration > Approval Workflow**, click the **Preview this record** icon and **Open Record** in the subsequent popup.
 
@@ -73,11 +81,15 @@ Nutanix Calm Plugin Configuration
 
 #. Under the **Name** column, click **Nutanix Calm - User Approval**.
 
-#. Under **Related Links**, click **Show Workflow**. This will open the Workflow Editor in another tab. *Do NOT make changes to this workflow.*
+#. Under **Related Links**, click **Show Workflow**. This will open the Workflow Editor in another tab.
+
+   .. raw:: html
+
+      <strong><font color="red">DO NOT MAKE CHANGES TO THIS WORKFLOW. It is a shared policy for all users on your cluster.</font></strong><br><br>
 
    .. figure:: images/3.png
 
-#. In the Workflow Editor, open the **Approval - User** stage and review the configuration.
+#. In the Workflow Editor, double-click the **Approval - User** stage and review the configuration.
 
    .. figure:: images/4.png
 
@@ -108,15 +120,19 @@ Creating Catalog Items
 
    Observe that the project is automatically configured as non-Marketplace Blueprints can only belong to a single Project. The ServiceNow plugin is capable of working with both Unpublished and Published Blueprints.
 
-   The benefit of using a Published Blueprint spanning multiple projects...
+   The benefit of using a Published Blueprint would be the ability to share a single Blueprint capable of spanning multiple projects, providing more flexibility when developing Service Now catalog items.
 
 #. Click **Choose Options**.
 
-#. Under **Variables > Default**, verify the *Enter your initials...* variable has the **Runtime** option enabled.
+#. Expand **Variables > Default**, verify the **Enter your initials...** variable has the **Runtime** option enabled.
+
+.. raw:: html
+
+   <strong><font color="red">Despite what the following screenshots will show, you will use your USER## ID in place of your initials to make your VMs easier to identify on the shared cluster.</font></strong><br><br>
 
 #. Click **Next Tab**.
 
-#. Under **Service Configuration > Default > VM Configuration**, observe that fields where **Runtime** was not enabled is the Blueprint cannot be manipulated during the Catalog Item creation process.
+#. Expand **Service Configuration > Default > VM Configuration**, observe that fields where **Runtime** was not enabled is the Blueprint cannot be manipulated during the Catalog Item creation process.
 
 #. Update the **Memory Size MB** to **3072**, and then disable the **Runtime** option to prevent users from altering this value during the VM ordering process. For this Catalog Item, users would still be able to request custom vCPU values.
 
@@ -130,15 +146,27 @@ Creating Catalog Items
 
 #. Fill out the following fields:
 
-   - **Item Name** - *Initials* CentOS - 3GB Bronze (ex. XYZ CentOS -3GB Bronze)
+   - **Item Name** - **USER**\ *##* CentOS - 3GB Bronze (ex. USER01 CentOS -3GB Bronze)
    - Click **Assign Local Groups**
    - Specify the **Calm Users** group
 
+   .. raw:: html
+
+      <strong><font color="red">Despite what the following screenshots will show, you will use your USER## ID in place of your initials to make your VMs easier to identify on the shared cluster.</font></strong><br><br>
+
    .. figure:: images/9.png
+
+   .. note::
+
+      As a reminder, these are LOCAL users within the ServiceNow instance due to not being able to integrate with LDAP within the lab environment. In a production environment you would entitle which AD groups you wanted to have permission to view and deploy this Blueprint. Similarly, you would provide that group with an appropriate RBAC role in Prism to allow those users to view and manage their VMs after they've been provisioned.
 
 #. Click **Checkout**.
 
 #. Return to **ServiceNow > Nutanix Calm > Catalog Management > Catalog Items** and verify your Catalog Item appears.
+
+   .. note::
+
+      It may take up to 2 minutes before your Catalog Item is listed as **Active**, this is normal. You will need to refresh the page for the record to appear.
 
 .. Adding Calm Blueprints to Service Catalog
    +++++++++++++++++++++++++++++++++++++++++
@@ -168,33 +196,43 @@ Creating Catalog Items
 Ordering VMs
 ++++++++++++
 
+With your Catalog Item active, you're ready to test ordering your first VM as an end user.
+
 #. From the **System Administrator** drop down menu in the upper-right, click **Logout**.
 
    .. figure:: images/13.png
 
    .. note::
 
-      As administrator, you can also simply **Impersonate User** for your **user##** account from this menu, which is faster than logging in/out as multiple users.
+      As administrator, you can also simply **Impersonate User** for your **operator**\ *##* account from this menu, which is faster than logging in/out as multiple users.
 
 #. Log back in using the following credentials:
 
-   - **User name** - *Your user##* (ex. user01)
+   - **User name** - *Your operator## account* (ex. operator01)
    - **Password** - nutanix/4u
 
 #. In the **Filter Navigator** field in the upper-left, search for **Launch Blueprint** to access the **Nutanix Calm** application within ServiceNow.
 
    .. figure:: images/31.png
 
+   Note as a user you do not have the ability to define new catalog items, sync the Calm inventory, etc.
+
    .. note::
 
       As all users are part of the local **Calm Users** group in the ServiceNow Developer Instance, you should expect to see other users' Catalog Items listed alongside your own. In a production environment you could use LDAP to enforce individually users only seeing the Blueprint Catalog Items which they have been assigned.
 
-#. Click your **CentOS - 3GB Bronze** entry to begin the user request.
+#. Expand **Category: Un-Published Blueprints**, and click your **USER**\ *##*\ **CentOS - 3GB Bronze** entry to begin the user request.
+
+#. Click **Launch**.
 
 #. Fill out the following fields:
 
-   - **Name of the application** - *Initials*-SnowReq1 (ex. XYZ-SnowReq1)
-   - **Enter your initials** - *Initials*
+   .. raw:: html
+
+      <strong><font color="red">Despite what the following screenshots will show, you will use your USER## ID in place of your initials to make your VMs easier to identify on the shared cluster.</font></strong><br><br>
+
+   - **Name of the application** - USER\ *##*\ -SnowReq1 (ex. USER01-SnowReq1)
+   - **Enter your initials** - USER\ *##* (ex. USER01)
    - **VM Configuration > Sockets** - *Change from default if desired*
    - **VM Configuration > Network Adapters** - *Leave default; Observe that the NIC setting determines the cluster to which the VM will be deployed, allowing further user control if desired.*
    - **ROOT > Password** - nutanix/4u
@@ -205,19 +243,17 @@ Ordering VMs
 
    .. figure:: images/15.png
 
-   You can also validate with **Calm > Applications** that your *Initials*\ **-SnowReq1** application has not begun provisioning.
+   You can also validate with **Calm > Applications** that your **USER**\ *##*\ **-SnowReq1** application has not begun provisioning.
 
    .. figure:: images/16.png
 
-#. Log out of your **user##** account and log back in as **admin** (or **End Impersonation**).
+#. Log out of your **user##** account and log back in as **admin** (or **operator**\ *##*\ **> End Impersonation** from the upper toolbar).
 
-#. As **admin**, open **ServiceNow > Nutanix Calm > Tracking > My Approvals**.
+#. As **admin**, type **My Approvals** in the **Filter navigator** and select **Self-Service > My Approvals**.
 
-#. Click **All** in the upper-left to clear default search conditions and view all pending and completed approvals for the **admin** user.
+   .. figure:: images/17b.png
 
 #. Click **Created** to sort descending and identify your request.
-
-   .. figure:: images/17.png
 
 #. Click your user request and expand the description to see the full details of the request.
 
@@ -225,26 +261,19 @@ Ordering VMs
 
    .. figure:: images/18.png
 
-#. You can view progress in a number of ways, including view **ServiceNow > Nutanix Calm > Tracking > Orders** as the user, or directly through Prism Central.
+#. You can view progress in a number of ways, including logging back in as your **operator**\ *##* user and viewing **ServiceNow > Nutanix Calm > Tracking > Orders**, or directly through Prism Central.
 
    .. figure:: images/19.png
 
    In a production ServiceNow environment, the user would receive updates on their request ticket via e-mail (and potentially through additional integrations like Slack).
 
-   .. note::
-
-      If desired, you can now request additional VMs or create additional catalog entries, such as:
-
-      - Cloning your single VM Blueprint and changing your USER##-DP category value to Silver or Gold
-      - Creating or uploading multi-VM Blueprints
-
 #. The Calm plugin also provides built-in dashboards for both admins and users to easily visualize key metrics relevant to the Calm integration.
 
    .. figure:: images/21.png
 
-#. Once the app is provisioned, Alex can allow users to access and manage their VMs directly through Prism Central based on their Project entitlements. Try it out by logging into Prism Central as:
+#. Once the app is provisioned, you can allow users to access and manage their VMs directly through Prism Central based on their Project entitlements. Try it out by logging into Prism Central as:
 
-   - **Username** - *user##*@ntnxlab.local (ex. user01@ntnxlab.local)
+   - **Username** - operator\ *##*\ @ntnxlab.local (ex. operator01@ntnxlab.local)
    - **Password** - nutanix/4u
 
    Based on your Calm **Operator** role for the project, you should have the ability to manage your application, including power operations, viewing metrics, and accessing VM consoles - without the ability to view, modify, or launch Blueprints.
@@ -256,9 +285,11 @@ Ordering VMs
 Verifying Policies
 ++++++++++++++++++
 
+Finally, you will verify the data protection and microsegmentation policies you built in the previous exercise have been applied to your self-service VM.
+
 #. Log back in to **Prism Central** as **admin** and select :fa:`bars` **> Virtual Infrastructure > VMs**.
 
-#. Click your *Initials*\ **-CentOS####** VM and select **Categories** to view which values have been assigned to the entity, including the **Environment**, **User**, and **USER##-DP** values assigned as part of your Blueprint.
+#. Click your **USER**\ *##*\ **-CentOS####** VM and select **Categories** to view which values have been assigned to the entity, including the **Environment**, **User**, and **USER##-DP** values assigned as part of your Blueprint.
 
    .. figure:: images/22.png
 
@@ -266,13 +297,21 @@ Verifying Policies
 
    .. figure:: images/24.png
 
-#. Click **Back to** *Initials*\ **-CentOS####** to return to your VM summary.
+   .. note::
+
+      The policy mapping view may not be populated immediately, despite the policies being applied. You can return to this view after verifying the policies are being applied.
+
+#. Click **Back to** **USER**\ *##*\ **-CentOS####** to return to your VM summary.
 
 #. Select **Recovery Points** to view available snapshots at each replication site. Once the initial replicated has completed, you should observe 1 recovery point available in both your **AWS-Cluster** and **POC###** clusters.
 
    .. figure:: images/25.png
 
    You will leverage this protection policy in a later exercise to migrate your VM back to your on-prem datacenter.
+
+   .. note::
+
+      You do not need to wait for the replication between your AWS Cluster and your HPOC cluster to complete in order to proceed.
 
    Next you'll verify the Nutanix Flow policy is properly enforced between your **Production** and **Dev** VMs.
 
@@ -284,16 +323,31 @@ Verifying Policies
 
 #. From your CentOS VM, issue a ``ping <USER##-MSSQL-Source-IP>`` command and observe normal connectivity.
 
-   Despite being included in the **Environment: Production** category, your *USER##*\ **-MSSQL-Source** VM lacks the additional **User:** *##* category to apply the security policy.
+   Despite being included in the **Environment: Production** category, your **USER**\ *##*\ **-MSSQL-Source** VM lacks the additional **User:** *##* category to apply the security policy.
 
    Take note of the latency reported by the ping (*it should be >25ms if stretching from AWS Oregon to the Nutanix PHX datacenter*).
 
 #. Now try ``ping <USER##-FiestaWeb-IP>`` and observe your ping receives no response.
 
-#. In **Prism Central**, select :fa:`bars` **> Policies > Security** and open your *USER##*\ **-IsolateEnv** policy.
+#. In **Prism Central**, select :fa:`bars` **> Policies > Security** and open your **USER**\ *##*\ **-IsolateEnv** policy.
 
    Observe that the traffic flow from **Dev** to **Production** has been discovered and blocked.
 
    .. figure:: images/26.png
 
    While this is a simple example, it demonstrates that combining ServiceNow, Calm, Flow, and other native Nutanix features such as replication and categories, new VMs and applications can be introduced into the environment through end user requests, but with administrative policy automatically applied.
+
+Takeaways
++++++++++
+
+- Extending your on-premises Nutanix environment to the public cloud with Nutanix Clusters allows you to take advantage of familiar features, including:
+
+   - Categories for policy assignment
+   - Data protection policy
+   - Nutanix Flow Security policy
+
+- Clusters allows you to lift and shift existing Nutanix workloads to the public cloud without added complexity of re-architecting applications
+
+- You can target multiple clusters for provisioning from a single Blueprint, making it easy to take advantage of the elastic capacity provided by Nutanix Clusters
+
+- The Nutanix Calm plugin for ServiceNow provides easy integration between the two products, allowing customers to take advantage of Nutanix Calm for provisioning and app lifecycle while leveraging the sophisticated self-service engine provided by ServiceNow

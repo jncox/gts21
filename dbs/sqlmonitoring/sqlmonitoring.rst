@@ -15,7 +15,7 @@ SQL Server Monitoring with Prism Ultimate
 
 Prism Ultimate licensing includes the SQL Server monitoring pack, which allows IT admins to understand how infrastructure may impact applications and vice versa. This is an agentless solution that gives visibility into databases, queries, SQL metrics and applies the X-FIT behavior learning and anomaly detection capabilities.
 
-#. Within Prism Central, click on :fa:`bars` **Infrastructure > VMs**.
+#. Within Prism Central, click on :fa:`bars` **> Virtual Infrastructure > VMs**.
 
 #. Select your **USER**\ *##*\ **-MSSQL-Source** VM and note the IP Address.
 
@@ -23,9 +23,27 @@ Prism Ultimate licensing includes the SQL Server monitoring pack, which allows I
 
 #. Within Prism Central, click on :fa:`bars` **Operations > Integrations**.
 
+#. If prompted, click **Get Started**.
+
+   .. note::
+
+      This is a one-time operation that may have already been completed by another user sharing the cluster.
+
 #. Click **Configure Instance**.
 
    .. figure:: images/4.png
+
+#. Select **Microsoft SQL Server** from the **External Entity Type** dropdown menu.
+
+#. If prompted that **Nutanix Collector is not enabled**, select **I have increased PC VM's Memory and vCPU** and click **Enable**.
+
+   Nutanix Collector is the service that runs within PC to gather statistics from SQL Server and vCenter entities.
+
+   .. figure:: images/16.png
+
+   .. note::
+
+      This is a one-time operation that may have already been completed by another user sharing the cluster.
 
 #. Fill out the following fields to add your SQL Server:
 
@@ -97,7 +115,7 @@ Triggering Prism SQL Server Alert
 
    We will now artificially generate the required usage to activate the alert we previously created. To do so, we will be executing a PowerShell script, which utilizes a program called HammerDB.
 
-#. Using **File Explorer**, navigate to **Local Disk(C:) > Program Files > HammerDB**.
+#. Using **File Explorer**, navigate to **Local Disk(C:) > Program Files > HammerDB-3.3**.
 
 #. Right-click on the file *workload.ps1*, and select **Run with Powershell**.
 
@@ -109,13 +127,13 @@ Triggering Prism SQL Server Alert
 
       .. figure:: images/15.png
 
+   If you were waiting on your SQL Server to provision in the :ref:`db_clustersdam` exercise, you should now be able to return and complete the exercise.
+
 Takeaways
 +++++++++
 
-   - Prism Ultimate bridges the gap between infrastructure, applications, and services. It satisfies IT OPS processes ranging from intelligent detection, to automated remediation.
+- Prism Ultimate bridges the gap between infrastructure, applications, and services. It satisfies IT OPS processes ranging from intelligent detection, to automated remediation.
 
-   - X-Play, the "IFTTT" for the enterprise, is our engine to enable the automation of daily operations tasks, enabling admins of every skill level to build custom automations to aid them in their daily duties.
+- Prism Ultimate allows the admin to understand the relationship between their applications and infrastructure, with broader visibility and intelligent insights learning.
 
-   - Prism Ultimate allows the admin to understand the relationship between their applications and infrastructure, with broader visibility and intelligent insights learning.
-
-   - X-Play can be used seamlessly with the application data monitored via Prism Ultimate to build smart automation that can alert and remediate issues both on the infrastructure and on applications.
+- X-Play can be used seamlessly with the application data monitored via Prism Ultimate to build smart automation that can alert and remediate issues both on the infrastructure and on applications.

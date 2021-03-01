@@ -1,243 +1,175 @@
-.. _environment_setup:
+.. _karbon_environment_setup:
 
+----------------
+Deploying Karbon
+----------------
 
-Preparation
-===========
+In this exercise you will deploy a complete Kubernetes cluster using Nutanix Karbon and verify your ability to communicate with the cluster via command line API tool, ``kubectl``.
 
-To run this Karbon/Kubernetes related workshop we have to prepare some VMs and applications we are going to use.
+Deploying Your Cluster
+++++++++++++++++++++++
 
-.. note::
-   Estimated time **45 minutes**
+To get the full experience of the simplicity of using Karbon to host cloud native applications on Nutanix, you will first deploy your own Karbon Kubernetes cluster through Prism Central.
 
-Pre-requisite
--------------
+#. Refer to :ref:`clusterdetails` for your **Prism Central** IP and **admin** credentials.
 
-To run the workshop some extra resources are needed on your laptop (besides Terminal or Putty for the SSH session) are needed.
+#. In **Prism Central**, select :fa:`bars` **> Services > Karbon**.
 
-.. note::
+#. Select **OS Images** left-hand menu and verify the **ntnx-1.0** image is **Downloaded**, as shown below.
 
-   You can also use the Windows Tool VM as it has Visual Code installed. You have to deploy it yourself as it is not being deployed by default. **Just make sure you update it before you install the extensions**. You can force the update by clicking **Help -> Check for Updates...**. If there is an update available the :fa:`gear` icon (bottom of the left pane) will shown a **1**. Click it and then click **Install update**. In the message that will appear, right bottom corner, Click **Restart** to update VC. That way you don't "mess up" your laptop.
+   .. figure:: images/1.png
 
-The following resources are needed for the workshop:
+   Otherwise, click **Download**.
 
-- Visual Code (VC) (VC can be found in the Tools map on the desktop of the Windows Tools VM. If not installed on your laptop: https://code.visualstudio.com/download), please install the following extensions:
-
-  - YAML (https://marketplace.visualstudio.com/items?itemName=redhat.vscode-yaml)
-  - Bracket Pair Colorizer 2 (https://marketplace.visualstudio.com/items?itemName=CoenraadS.bracket-pair-colorizer-2)
-
-  To install the extensions use the extensions button (left hand pane, fourth icon from the top) in VC and use the Search Extensions field to find and install them.
-
-  .. figure:: images/1.png
-
-- Install Openssl into your Windows deployment (Linux and Mac have it installed by default). Follow this article to install it to your Windows instance https://medium.com/swlh/installing-openssl-on-windows-10-and-updating-path-80992e26f6a1
-
-
-Prepare your environment
-------------------------
-
-For this workshop to be run, we need to prepare the environment. Follow the next steps to make your environment ready. They are in high level:
-
-- Enable Karbon (if not already done)
-- Download the Karbon needed OS
-- Deploy a Kubernetes Development cluster
-- Deploy a MariaDB database for our application using a Blueprint
-
-Enable Karbon
-^^^^^^^^^^^^^
-
-Follow these steps to enable Karbon
-
-#. Open your Prism Central and click :fa:`bars` -> Services -> Karbon
-#. If Karbon has not been enabled yet, click the Enable button. This will take a few seconds
-#. To deploy a Kubernetes cluster we need to have an operating system ready. If you see the Download button, click this button to have the OS downloaded.
-#. Click the **+Create Kubernetes Cluster** button to start creating a cluster
-#. Select the Development Cluster as the Recommended Configuration, and click **Next**
-
-   .. figure:: images/2.png
-
-#. Provide a name for the Kubernetes cluster. Recommended *Initials*-karbon
-#. Select your cluster in the **Nutanix CLuster** field. Leave the rest of the fields default.
-#. Click **Next**
-#. Select your Primary network in the **Network Resources** and leave the **Worker Resources** to 1. Click **Next**
-
-    .. figure:: images/3.png
-
-#. Under the Network Provider, click **Next**
-#. In the **Storage Class** screen provide the following information:
-
-   - **Nutanix Cluster** - your assigned cluster
-   - **Cluster Username** - admin
-   - **Cluster Password** - corresponding password
-   - Leave the rest of the fields default
-
-   .. figure:: images/4.png
-
-#. Click on the **Create** button to have the system create the Development cluster. This process takes approx. 5-10 minutes. 
-
-   .. figure:: images/5.png
-
-
-.. raw:: html
-   
-   <FONT color=RED><CENTER><H3>If you already ran the CI/CD workshop, please use that MariaDB server as we want to keep the resources to a minimum. Skip the below part, you're already ok..</h3></center></font>
-
-
-------
- 
-Deploy the MariaDB Server
-^^^^^^^^^^^^^^^^^^^^^^^^^
-
-As we will deploy the Fiesta Application (a simple e-Commerce application) to our Kubernetes cluster, one part of the application is a MariaDB. This database will be deployed using a blueprint so it can be done easily.
-
-#. Open Calm in your Prism Central interface via :fa:`bars` -> Services -> Calm
-#. Download the needed blueprint that we're going to use to your machine `here <https://raw.githubusercontent.com/nutanixworkshops/gts21/master/karbon/preparation/mariadb.json>`_
-#. Upload the Blueprint By clicking on the Blueprint Icon and the **Upload Blueprint** button
-#. Assign the Blueprint to your project. If your product is not allowing anything, make sure it has been configured. If not, please follow these settings:
-   
-   Configure users, cluster and network to use
-   *******************************************
-   
-   #. Open your assigned PRISM Central
-   #. Click the :fa:`bars` **-> Calm**
-   #. Within the Calm UI, Select |proj-icon| **Projects** from the sidebar.
-   
-      .. figure:: images/calm3/projects1.png
-   
-   #. Click + Create Project
-   
-   #. Fill out the following fields:
-   
-      - **Project Name** - *initials*-Calm
-      - **Description** - *initials*-Calm
-   
-   #. Under **Users, Groups, and Roles**, click **+ User**.
-   
-   #. Fill out the following fields and click **Save**:
-   
-      - **Name** - SSP Admins
-      - **Role** - Project Admin
-   
-   #. Click **+ User**, fill out the following fields and click **Save**:
-   
-      - **Name** - SSP Developers
-      - **Role** - Developer
-   
-   #. Click **+ User**, fill out the following fields and click **Save**:
-   
-      - **Name** - SSP Consumers
-      - **Role** - Consumer
-   
-   #. Click **+ User**, fill out the following fields and click **Save**:
-   
-      - **Name** - SSP Operators
-      - **Role** - Operator
-   
-      .. figure:: images/projects_name_users1.png
-   
-      .. note::
-   
-       Click `here <https://portal.nutanix.com/#/page/docs/details?targetId=Nutanix-Calm-Admin-Operations-Guide-v56:nuc-roles-responsibility-matrix-c.html>`_ to view the complete matrix of default SSP roles and associated permissions.
-   
-   #. Under **Infrastructure**, click the blue **Select Provider** button, and then **Nutanix**.
-   
-   #. In the box that appears, click the white **Select Clusters & Subnets** button, and in the pop-up, select your AHV cluster.  Once your cluster is selected,  choose the **Primary** network, and if available, the **Secondary** network, and click **Confirm**.
-   
-      .. figure:: images/projects_cluster_subnet_selection1.png
-   
-   #. Within the **Selected Subnets** table, select :fa:`star` for the **Primary** network to make it the default virtual network for VMs in the **Calm** project.
-   
-      .. figure:: images/projects_infrastructure1.png
-   
-   #. Click **Save & Configure Environment**.
-   #. Wait a few minutes till the spinning wheel in the **Save & Configure Environment** button has stopped and you see your project appear when you click on the | proj-icon|
-   
-      .. note::
-         If after 5 minutes you don't see your project show up, please refresh your browser.
-
-   ------
-   
-   Configure Environment
-   *********************
-   
-   Now that we have set the users, their roles, which cluster and networks to use, we need to tell the project about the environment. In this part of the project we tell Calm the following per O/S.
-   
-   1. VM Name using Calm macros
-   2. VM Resources (CPU, Cores per vCPU, Memory)
-   3. Guest customization (CloudInit or Sysprep)
-   4. Disks configuration
-   5. Boot configuration
-   6. vGPU use
-   7. Network adapters
-   8. Need of a serial port
-   9. Connection configuration including general credentials
-       
    .. note::
-     These parameters are set as DEFAULT parameters. Meaning you can change them in the Blueprints you are going to create and deploy.
-   
-   As we are mostly using the Linux O/S in this workshop we are just configuring these parameters.
-   
-   #. When you dropped back to the Projects, click your created project to start the configuration
-   #. In the **Enviroment** part we're assigning the parameters needed for Calm to be able to deploy VMs
-   
-      .. figure:: images/calm3/environment.png
-   
-   #. In the **VM Configuration** area, provide the VM Name as @@{initials}@@_VM
-   
-   #. Provide the **vCPU, Cores per vCPU** and the **Memory (GiB)** fields with the value of **1**
-   
-   #. Under **DISKS (1)** Select the *CentOS7.qcow2* under the Image field. Leave the other options in this area of the configuration.
-      
-      .. figure:: images/calm3/disk.png
-   
-   #. Under **NETWORK ADAPTERS (NICS)(1)** Select your Cluster name and Primary as the network. Make sure you have the **Private IP** set as *Dynamic*.
-   
-      .. figure:: images/calm3/network.png
-   
-   #. At the **CONNECTION** area, click on the Credential and select *Add New Credential*. As we are using in the Blueprints new setting, we still need to provide       them to the Project. 
-   
-      .. figure:: images/calm3/credential.png
-   
-   #. In the new screen use **centos** as the Credential Name, **root** as the user and **nutanix/4u** as the password. Click on **Done** if your are ready.
-   
-     
-      .. figure:: images/calm3/credential-2.png
-   
-   #. Click **Save** to save the project.
-   
-   #. After a few seconds, the system saves the project and configure itself so it can use the configuration, you should see that the Exclamation mark behind       Environment should not be shown as we had before (see step 1).
-      
-      .. figure:: images/calm3/environment-2.png
 
-Configure the blueprint
-***********************
+      This is a one-time operation per Prism Central instance. This is the CentOS-based disk image, provided by Nutanix, used to provision node VMs within the Karbon cluster.
 
-After uploading the BP we need to configure the deployment.
+#. Once the **ntnx-1.0** is **Downloaded**, select **Clusters** from the left-hand menu.
 
-#. Click the uploaded Blueprint in the Blueprints "overview" |bp_icon|
-#. Click on the MariaDB_VM in the middle part of the screen
-#. Click Credentials, and set the password to **nutanix/4u**
-#. Click **Save** and the **Back** button to return back to the main part of the Blueprint
-#. Click VM and make sure to check the following parameters:
+#. Click **+ Create Kubernetes Cluster** to begin deployment.
 
-   - **Disk**: Clone from Image Service - CentOS7 (or you can use the Download Configuration as mentioned in the blueprint)
-   - **NETWORK ADAPTERS**: NIC 1 - Primary - Dynamic
-   - **Credentials**: CentOS
+   .. figure:: images/1a.png
 
-#. Click the **Save** button and the **Launch**
-#. Provide your initials and click the **Create** button to have the application deployment Started
-#. You can follow the process by clicking in the application (which has opened) the **Audit** tab
-#. The process will take about 5-10 minutes
+#. To conserve memory and IP resources, select the **Development Cluster** configuration.
+
+   .. raw:: html
+
+      <br><strong><font color="red">If you select Product Cluster, your shared cluster is guaranteed to run out of memory and/or IP addresses while other users are trying to complete their labs. Don't be a reason we can't have nice things.</font></strong><br><br>
+
+#. Click **Next**.
+
+#. On **Name and Environment**, fill out the following fields:
+
+   - **Kubernetes Cluster Name** - USER\ *##*\ -karbon (ex. USER01-karbon)
+   - **Nutanix Cluster** - *Select your HPOC cluster* (NOT AWS-Cluster)
+   - **Kubernetes Version** - *Leave Default*
+   - **Host OS** - ntnx-1.0
+
+   .. figure:: images/6.png
+
+#. Click **Next**.
+
+#. On **Node Configuration**, fill out the following fields:
+
+   - **Kubernetes Node Network** - Primary
+   - **Number of Workers** - 1
+
+   .. figure:: images/7.png
+
+#. Click **Next**.
+
+#. On **Network Provider**, keep the default selections and click **Next**.
+
+      Karbon utilizes **Flannel** to provide Layer 3 IPv4 networking between multiple nodes within the Karbon cluster. Kubernetes assumes that each Pod has a unique, routable IP inside the cluster.
+
+      The **Service CIDR** defines the internal network range on which services (like etcd) are exposed.
+
+      The **Pod CIDR** defines the network range used to IP pods. The default configuration allows for a maximum of 256 nodes with up to 256 pods per node.
+
+#. On **Storage Class**, fill out the following fields:
+
+   - **Storage Class Name** - *Leave Default*
+   - **Nutanix Cluster** - *Select your HPOC cluster* (NOT AWS-Cluster)
+   - **Cluster Username** - admin
+   - **Cluster Password** - *Your Prism admin password*
+   - **Storage Container Name** - Default
+   - **Reclaim Policy** - *Leave Default*
+   - **File System** - *Leave Default*
+
+   .. figure:: images/8.png
+
+#. Click **Create**.
+
+   This process will take approximately 10 minutes to complete. During this time, Karbon will deploy a non-highly available (development) Kubernetes cluster consisting of the following components:
+
+      - **1x Master Node**
+
+         The **Master** node acts as the API front-end of the Kubernetes cluster and manages workloads provisioned on **Worker** nodes.
+
+      - **1x etcd Node**
+
+         **etcd** is a distributed (in multi-node configurations), key-value store used to store Kubernetes cluster data. This includes all of the YAML data that describes the Resources we will be deploying on the cluster to create Pods, Services, and more.
+
+      - **1x Worker Node**
+
+         The **Worker** nodes run the Pods as assigned by the **Master** nodes.
+
+   If you're still waiting for your Karbon cluster to provision, you can review the :ref:`karbon_networking` which provides more context around Karbon networking at the beginning of the next lab. *Be sure to return to this lab after reading to complete the connection to your Karbon cluster*.
+
+#. Once your **Cluster Status** reaches **Healthy**, click your cluster **Name** to view the Karbon dashboard.
+
+   .. figure:: images/9.png
+
+   Currently, the Karbon dashboard reports on the health of the Kubernetes infrastructure and provides functions for cluster management, such as providing additional persistent storage for your Pods via Nutanix Volumes or Nutanix Files.
+
+Connecting to Your Kubernetes Cluster
++++++++++++++++++++++++++++++++++++++
+
+By default, Kubernetes uses a file for authentication instead of username and password. This file, called **kubeconfig.cfg** has to be downloaded and stored locally from the host from which you will access your Kubernetes cluster.
+
+We will use this file to interact with the cluster using the Kubernetes command line utility ``kubectl``, which is pre-installed in your **USER**\ *##*\ **-WinToolsVM** VM.
+
+#. Connect to your **USER**\ *##*\ **-WinToolsVM** VM via RDP using the **NTNXLAB\\Administrator** credentials.
+
+#. Within your **USER**\ *##*\ **-WinToolsVM** VM, open **Prism Central** in Google Chrome.
+
+#. In **Prism Central**, select :fa:`bars` **> Services > Karbon**.
+
+#. Select your **USER**\ *##*\ **-karbon** cluster and click **Actions > Download Kubeconfig**.
+
+   .. figure:: images/10.png
+
+#. Click **Download**.
+
+   .. figure:: images/11.png
+
+   .. note::
+
+      If prompted in Google Chrome with a **This type of file can harm your computer** warning, click **Keep** to download the file.
+
+#. Open the **Downloads** folder in **File Explorer** and note the complete **kubectl.cfg** filename.
+
+   .. figure:: images/12.png
+
+   The file should be named *YOUR-KARBON-CLUSTER-NAME*\ **-kubectl.cfg**. You'll need this in an upcoming step.
+
+   By default, ``kubectl`` will look for a **User Environment Variable** named **KUBECONFIG** to point to your **kubectl.cfg** file. Rather than faff around in the Windows UI, this variable can be easily added from the command line.
+
+#. Open **PowerShell**.
+
+   Do you feel powerful yet? Good, me too.
+
+#. Run ``SETX KUBECONFIG "C:\Users\Administrator\Downloads\YOUR-KARBON-CLUSTER-NAME-kubectl.cfg"`` using your specific **kubectl.cfg** filename.
+
+   .. figure:: images/13.png
+
+   This will create the **User Environment Variable** such that it will persist across command line sessions, however it will not be available within this command line session.
+
+   Windows, can't live with it, can't live without it.
+
+#. Close **PowerShell**.
+
+#. Open **PowerShell**.
+
+   What a rollercoaster ride, huh?
+
+#. Run ``$env:KUBECONFIG`` and verify the path to your **kubectl.cfg** file is returned.
+
+#. Finally, run ``kubectl get nodes`` to list the nodes in your Kubernetes cluster.
+
+   If you have added the path to your **kubectl.cfg** file correctly, the output should resemble the image below.
+
+   .. figure:: images/14.png
+
+   .. note::
+
+      For security purposes, the token used by **kubectl.cfg** is only valid for 24 hours by default. If you are completing these labs over multiple days, you will eventually need to download a fresh **kubectl.cfg** from Karbon.
 
 .. raw:: html
 
-    <BR><center><h2>That concludes this module!</H2></center>
-    
------
+    <H1><font color="#B0D235"><center>Congratulations!</center></font></H1>
 
-Now that the pre-requirements are ready, we can proceed.
+Using Nutanix Karbon, you've deployed and connected to a Kubernetes cluster in minutes. As seen in the wizard, deploying a highly available Kubernetes cluster for production environments is equally as simple.
 
-.. |proj-icon| image:: ../images/projects_icon.png
-.. |bp_icon| image:: ../images/blueprints_icon.png
-.. |mktmgr-icon| image:: ../images/marketplacemanager_icon.png
-.. |mkt-icon| image:: ../images/marketplace_icon.png
-.. |bp-icon| image:: ../images/blueprints_icon.png
+In the next exercise, we will build on this deployment by adding third party services commonly used to support production-ready cloud native application environments, and how they work with Karbon.

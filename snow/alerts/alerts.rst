@@ -1,17 +1,29 @@
 .. _snow_alerts:
 
------------------------------------
-ServiceNow Alert & CMDB Integration
------------------------------------
+-------------------------------------
+ServiceNow Alert and CMDB Integration
+-------------------------------------
 
-<Intro - reference https://www.nutanix.com/blog/nutanix-integration-with-servicenow>
+Since July 2019, ServiceNow has offered native support for discovering Nutanix infrastructure running AHV or ESXi as part of its Change Management Database (CMDB). This provides ServiceNow/Nutanix customers with complete visibility of Nutanix clusters, hosts, VMs, categories, CVMs, storage pools, and storage containers with ServiceNow - including the ability to:
+
+   - Generate full cluster topologies
+   - Report on storage utilization
+   - Near real-time visibility with event-driven discovery
+
+Nutanix X-Play support for sending Alerts to ServiceNow complements the CMDB integration by binding the event created by the Nutanix alert with the Configuration Item (VM, host, etc.) auto-discovered by ServiceNow.
+
+   .. figure:: images/0.png
 
 Configuring a ServiceNow environment to begin discovering your Nutanix resources only takes a few minutes, `as covered by Paul Harb here <https://www.youtube.com/watch?v=G1EqR0Vt1wo>`_. However, it does depend on a number of pre-requisites covered in the section below.
+
+In this exercise, you will implement a Playbook using Prism X-Play to filter and send alerts to ServiceNow. You will then trigger the alert and review the data inside of ServiceNow.
 
 Your Environment
 ++++++++++++++++
 
-To save time, and to ensure a consistent configuration for all users within the shared environment, your ServiceNow Developer Instance *has already been pre-staged with all components necessary to complete the following exercise*, including:
+.. raw:: html
+
+   <strong><font color="red">To save time, and to ensure a consistent configuration for all users within the shared environment, your ServiceNow Developer Instance has already been pre-staged with all components necessary to complete the following exercise, including:</font></strong><br><br>
 
 Subscription Plugins
 ....................
@@ -55,7 +67,8 @@ While you may typically want to send many, or all, Nutanix alerts from your clus
 
    - **Entity Type** - VM
    - **Entity** - All VMs in a Category
-   - **Category** - Your User:\ *##* Category (ex. User:01)
+   - **Category** - Your User: *##* Category (ex. User: 01)
+   - **Metric** - Memory Usage
 
 #. Under **Static Threshold**, select **Alert Critical if** and specify **>= 75%**.
 
@@ -92,7 +105,7 @@ Nutanix Playbooks, or X-Play, allow administrators to easily automate tasks with
 
 #. Click **+ Add Action** and select **Send Alert to ServiceNow**.
 
-#. Refer to your :ref:`clusterdetails` and enter the **ServiceNow Instance Name** from your **Developer Instance URL** (ex. dev12345) and your **ServiceNow admin Credentials**.
+#. Refer to your :ref:`clusterdetails` and enter the **ServiceNow Instance Name** (ex. dev12345) and your **ServiceNow admin Credentials**.
 
    .. figure:: images/8.png
 
@@ -110,7 +123,7 @@ Nutanix Playbooks, or X-Play, allow administrators to easily automate tasks with
 
    Hmmm, maybe we should apply some artificial load instead!
 
-#. SSH into your *Initials*\ **-CentOS####** VM as **root** and run the following commands to begin consuming free memory:
+#. SSH into your **USER**\ *##*\ **-CentOS####** VM as **root** and run the following commands to begin consuming free memory:
 
    ::
 
@@ -127,6 +140,10 @@ Nutanix Playbooks, or X-Play, allow administrators to easily automate tasks with
 
    This can be seen in on the **VM Metrics** page inside Prism Central as well, though this data is only updated in 5 minute increments.
 
+   .. note::
+
+      The alert could take as long as 15 minutes to trigger, good time to stretch and grab a *drink*!
+
 #. Once the **Alert** appears in **Prism Central**, cancel the stress command in your SSH session by pressing ``Ctrl+C``.
 
    .. figure:: images/12.png
@@ -139,11 +156,11 @@ Nutanix Playbooks, or X-Play, allow administrators to easily automate tasks with
 
    .. figure:: images/14.png
 
-   This provides... You can access addition details about resources within the dashboard, such as **Hosts**, by clicking them.
+   This provides as overview of all of the Nutanix objects discovered by ServiceNow through Prism Central API. You can access additional details about resources within the dashboard, such as **Hosts**, by clicking them.
 
 #. Within the dashboard, select the **Nutanix VM Summary** chart to view all currently discovered Nutanix VMs.
 
-#. Select your **VM** to view associated details from the **Change Management Database**.
+#. Search for and select your **USER**\ *##*\ **-CentOS####** VM to view associated details from the **Change Management Database**.
 
    .. figure:: images/15.png
 
@@ -161,7 +178,7 @@ Nutanix Playbooks, or X-Play, allow administrators to easily automate tasks with
 
 #. In the **Filter Navigator** field in the upper-left, search for **All Alerts**.
 
-   If there are multiple alerts, you can easily identify yours by clicking the **Filter** icon and looking for **Resource starts with** *Your Initials*.
+   If there are multiple alerts, you can easily identify yours by clicking the **Filter** icon and looking for **Resource starts with** *USER##* (ex. USER01).
 
    .. figure:: images/13.png
 
@@ -173,3 +190,9 @@ Nutanix Playbooks, or X-Play, allow administrators to easily automate tasks with
 
 Takeaways
 +++++++++
+
+- ServiceNow offers integrated support for discovery of Nutanix infrastructure
+
+- X-Play provides a built-in action for sending Nutanix alerts to ServiceNow
+
+- Sending alert data to ServiceNow allows for tracking incident and remediation history as part of the CMDB
