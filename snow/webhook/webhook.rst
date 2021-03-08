@@ -189,6 +189,10 @@ Building the Action
    - **Name** - Content-Type
    - **Value** - application/json
 
+   .. note::
+
+      Double check you are creating **Content-Type application/json** under **Headers** and not **Query Parameters**!
+
    *This will allow sending data in the API call body back to the Prism webhook in the expected format.*
 
    .. figure:: images/15.png
@@ -291,7 +295,9 @@ Building the Flow
 
       If search does not find your action, return to your **USER**\ *##*\ **-RESTAPI** tab in **Flow Designer** and click **Publish**.
 
-#. Finally, you need to map the data provided by the **Alert Record** in your **Trigger** to the **Input Variables** you created for your Action. Expand **Alert Record** in the **Data** column, then drag and drop the appropriate values to match the screenshot below:
+      Finally, you need to map the data provided by the **Alert Record** in your **Trigger** to the **Input Variables** you created for your Action.
+
+#. Expand **Alert Record** in the **Data** column, then drag and drop the appropriate values to match the screenshot below:
 
    .. figure:: images/25.png
 
@@ -307,6 +313,10 @@ Building the Flow
 
 Testing the Flow
 ................
+
+#. In **Prism Central**, select :fa:`bars` **> Activity Alerts**.
+
+#. Select your existing **User:**\ *##* **-VM Memory Usage** alert and click **Resolve** to clear before generating a new alert.
 
 #. SSH into your *Initials*\ **-CentOS####** VM as **root** and run the following commands to begin consuming free memory:
 

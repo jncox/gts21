@@ -90,7 +90,7 @@ We'll begin by creating the manifest file for the **Fiesta** web frontend and th
 
       - **spec > template > spec > containers > ports > containerPort:** 3000
 
-         This is the port that the Docker container NodeJS webserver is listening on. It is hard coded as part of the container image. Self-proclaimed DevOps genius and Nutanix Solutions Architect, Christophe Jauffret, would tell you that we should have probably defined the port using an environment variable - *sorry Christophe!*
+         This is the port that the Docker container NodeJS webserver is listening on. It is hard coded as part of the container image.
 
    **Lines 19-29** define the **Service**
 
@@ -185,6 +185,10 @@ In order to get access to our **Fiesta** web frontend, we need to define a new *
 
       Add-Content -Path C:\Windows\System32\drivers\etc\hosts -Value "<TRAEFIK-EXTERNAL-IP>`tfiesta.lab.local" -Force
       cat C:\Windows\System32\drivers\etc\hosts
+
+   .. note::
+
+      No, ``<TRAEFIK-EXTERNAL-IP>`tfiesta.lab.local`` isn't a typo. ```t`` in PowerShell inserts a tab between the **<TRAEFIK-EXTERNAL-IP>** value and **fiesta.lab.local**.
 
    .. figure:: images/17.png
 

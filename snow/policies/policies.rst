@@ -108,6 +108,10 @@ Similar to the previous exercise, you'll map a microsegmentation policy to speci
 
       Ignore the Fiesta deployment with alternate VM names, as these are used in other GTS labs.
 
+   .. note::
+
+      If you have already completed the **Hybrid Cloud Database Management** lab track, you may not be able to access your Fiesta web front end as it is connected to your AAG database. Inability to connect to the app will not impact this lab, you can proceed.
+
 #. Right-click your **USER##-FiestaWeb** VM and select **Manage Categories**.
 
    .. figure:: images/8.png
@@ -185,7 +189,7 @@ In order for non-infrastructure administrators to access Calm, allowing them to 
 
       If **+ User** is greyed out, refresh Calm. The **NTNXLAB.local** profile is already configured in Prism Central, but this issue has occurred (rarely) in testing.
 
-   - **Name** - operator\ *##*\ @ntnxlab.local (ex. user01@ntnxlab.local)
+   - **Name** - operator\ *##*\ @ntnxlab.local (ex. operator01@ntnxlab.local)
    - **Role** - Operator
    - Click **Save**
 

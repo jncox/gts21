@@ -20,7 +20,7 @@ Your Environment
 Local User Accounts and Group
 .............................
 
-To integrate with LDAP, ServiceNow requires connectivity to your on-prem Active Directory environment through either VPN or utilizing a read-only Domain Controller in your network's DMZ. As this is not possible within the HPOC environment, you will utilize local accounts (**user01**, **user02**, etc.) that have been pre-created within ServiceNow.
+To integrate with LDAP, ServiceNow requires connectivity to your on-prem Active Directory environment through either VPN or utilizing a read-only Domain Controller in your network's DMZ. As this is not possible within the HPOC environment, you will utilize local accounts (**operator01**, **operator02**, etc.) that have been pre-created within ServiceNow.
 
 These local user accounts have all been added to the User Group: **Calm Users**. The group has been assigned the ServiceNow Role: **x_nuta2_nutanix_ca.user**. Users need to be assigned this specific role in order to appear within the Calm Plug-in as eligible for being assigned access to Blueprint Catalog Items.
 
@@ -67,11 +67,15 @@ Nutanix Calm Plugin Configuration
 
 #. The plugin will periodically sync with Prism Central to update Blueprints, Projects, etc., however as you just created both your Project and Blueprint, you can force a sync by clicking the **Sync Now** button at the bottom of **Application Properties**. Click **OK** to begin the sync.
 
-   .. figure:: images/5.png
-
    .. note::
 
-      While the sync is taking place, users may experience issues trying to create catalog items and launch Blueprints. As multiple users will be sharing a cluster and working on the lab simultaneously, you may need to re-attempt these actions if the conflict with another user beginning a sync. The sync typically only takes ~1 minute, so this should not cause any serious disruption. Take a minute to stand up from your desk, stretch, and try again!
+      If the UI shows that the plug-in is currently **Syncing**, you will have to wait a minute, refresh the page and click **Sync Now** once the previous sync has finished.
+
+   .. figure:: images/5.png
+
+   .. raw:: html
+
+      <strong><font color="red">While the sync is taking place, users may experience issues trying to create catalog items or launch Blueprints. As multiple users will be sharing a cluster and working on the lab simultaneously, you may need to re-attempt these actions if the conflict with another user beginning a sync. The sync typically only takes ~1 minute, so this should not cause any serious disruption. Take a minute to stand up from your desk, stretch, and try again!</font></strong><br><br>
 
 #. While your inventory sync is in process, return to the **Nutanix Calm > Application Properties** page.
 
@@ -104,6 +108,10 @@ Nutanix Calm Plugin Configuration
 #. In **ServiceNow > Nutanix Calm**, browse the **Inventory Sync** section and verify your project and Blueprint are available.
 
    .. figure:: images/6.png
+
+   .. note::
+
+      If your Blueprint does not appear. Log out of the ServiceNow instance, clear your cache (or use Incognito), and log into ServiceNow again. Retry the **Sync Now** operation on the **ServiceNow > Nutanix Calm > Configuration > Application Properties** page.
 
    Now you're ready to create your first service offering!
 
@@ -267,6 +275,26 @@ With your Catalog Item active, you're ready to test ordering your first VM as an
 
    In a production ServiceNow environment, the user would receive updates on their request ticket via e-mail (and potentially through additional integrations like Slack).
 
+   .. note::
+
+      If you do not see your Blueprint being provisioned, do the following to determine the source of your error:
+
+      - Log-in/impersonate your **operator**\ *##* account in **ServiceNow**
+      - Open **Service Now > Nutanix Calm > Tracking > Incidents** and click the **INC#######** record
+      - Under **Activities**, open **Incident attachment.txt** and review the error message.
+
+         .. figure:: images/33.png
+
+         The most common cause is leading or trailing whitespace in the naming of the **USER**\ *##*\ **-SnowReq1**.
+
+      - Go to **Launch Blueprint** and try again
+
+   .. note::
+
+      The first person to provision this VM on a cluster may experience extended time to deploy the first VM. This is because the **CentOS.qcow2** image must first be synced to the **AWS-Cluster** from **Prism Central**.
+
+      In rare cases the deployment may time out, indicating the **CentOS7.qcow2** image did not sync. Trying again should resolve, if not, reach out for assistance.
+
 #. The Calm plugin also provides built-in dashboards for both admins and users to easily visualize key metrics relevant to the Calm integration.
 
    .. figure:: images/21.png
@@ -299,7 +327,7 @@ Finally, you will verify the data protection and microsegmentation policies you 
 
    .. note::
 
-      The policy mapping view may not be populated immediately, despite the policies being applied. You can return to this view after verifying the policies are being applied.
+      The policy mapping view may not be populated immediately, despite the policies being applied. You can continue with the lab and return to this view after verifying the policies are being applied.
 
 #. Click **Back to** **USER**\ *##*\ **-CentOS####** to return to your VM summary.
 

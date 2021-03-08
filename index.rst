@@ -10,67 +10,6 @@
    info/help
    info/validate
 
-.. toctree::
-   :maxdepth: 2
-   :caption: Hybrid Cloud IaaS
-   :name: _hybridiaas
-   :hidden:
-
-   snow/gettingstarted/gettingstarted
-   snow/policies/policies
-   snow/snowcalm/snowcalm
-   snow/migration/migration
-   snow/alerts/alerts
-   snow/webhook/webhook
-
-.. toctree::
-   :maxdepth: 2
-   :caption: Hybrid Cloud Database Management
-   :name: _hybrideuc
-   :hidden:
-
-   dbs/gettingstarted/gettingstarted
-   dbs/clustersaag/clustersaag
-   dbs/clustersdam/clustersdam
-   .. dbs/patching/patching
-   dbs/sqlmonitoring/sqlmonitoring
-
-.. toctree::
-   :maxdepth: 2
-   :caption: Hybrid Cloud EUC
-   :name: _hybrideuc
-   :hidden:
-
-   euc/gettingstarted/gettingstarted
-   euc/expand/expand
-   euc/runbook/runbook
-   euc/secure/secure
-
-.. toctree::
-   :maxdepth: 2
-   :caption: Containerizing Apps and CI/CD
-   :name: _cicd
-   :hidden:
-
-   cicd/start/start
-   cicd/basic/basic
-   cicd/phase2/phase2
-   cicd/phase3/phase3
-   cicd/phase4/phase4
-   cicd/phase5/phase5
-
-.. toctree::
-   :maxdepth: 2
-   :caption: Cloud Native Apps on Nutanix
-   :name: _k8s
-   :hidden:
-
-   karbon/gettingstarted/gettingstarted
-   karbon/preparation/preparation
-   karbon/karbon/karbon
-   karbon/deploy/deploy
-   karbon/day-2/day-2
-
 .. raw:: html
 
    <br><center><img src="https://github.com/nutanixworkshops/gts21/raw/master/images/welcome.png" alt="Welcome to Nutanix Virtual Global Tech Summit 2021"></center><br>
@@ -178,6 +117,17 @@ Can I Run LCM Updates On My Cluster?
 
    <br><center><img src="https://media.giphy.com/media/F8BGFOzGhswhRUS1w8/giphy.gif"></center><br><br>
 
+I Have An Issue, Should I Reboot Prism Central On My Cluster?
+.............................................................
+
+I can't believe I have to say this, but **NO**, please do not reboot Prism Central or Prism Central services on your cluster **THAT IS BEING SHARED WITH SEVERAL OTHER PEOPLE**. Reach out in the appropriate Slack channel for assistance with your lab issue.
+
+See :ref:`help` for complete instructions.
+
+.. raw:: html
+
+   <br><center><img src="https://media.giphy.com/media/l3V0H7bYv5Ml5TOfu/giphy.gif"></center><br><br>
+
 Where Is The Lab For Provisioning Clusters?
 ...........................................
 
@@ -190,8 +140,10 @@ How Long Do I Have Access To The Labs?
 
 The lab environments will be available all day Tuesday and Wednesday. The labs will be supported by a team of SMEs during the following periods:
 
-- **Tuesday** - 08:00 CET - 20:00 CET
-- **Wednesday** - 08:00 CET - 12:00 CET
+- **Tuesday** - 06:00AM PST - 6:00PM PST
+- **Wednesday** - 06:00AM PST - 12:00PM PST
+
+The lab environments will continue to be available until 9:00PM PST on Wednesday if you wish to continue working on labs after the closing session. SME support and lab validation will end at the beginning of Wednesday's closing session.
 
 Do I Have To Complete The Lab Tracks In Order?
 ..............................................
@@ -211,6 +163,11 @@ What Happens To The Labs Post-Event?
 ....................................
 
 Following the event, we will be integrating the GTS labs into new and existing Bootcamps for you to drive prospect and customer engagement during 2021.
+
+Generic Looking Frequently Asked Question?
+..........................................
+
+If you're paying attention, come join us in `#﻿literate-adults <slack://channel?team=T0252CLM8&id=C01MHG5NDPD>`_ on Slack.
 
 How Do I Get My Cluster Assignment Info?
 ........................................
@@ -241,8 +198,3 @@ Where Can I Access More Clusters Demo Resources?
 - `Standalone Clusters Deployment Demo <https://clusters.nutanixtestdrive.com/>`_ - On-demand MCM Clusters on AWS deployment demo *without a Test Drive sign-up.* A great option for quick demos of how easily Clusters can be provisioned.
 
 - `Nutanix YouTube Clusters Playlist <https://www.youtube.com/playlist?list=PLAHgaS9IrJeevEB17CSW5BE8Y9n9v18bU>`_ - Short videos covering topics like deployment, networking, security, and hibernation.
-
-When Is Matt Going To Shave? He Looks Ridiculous.
-.................................................
-
-Your concern is noted and appreciated. Ask again in April.
