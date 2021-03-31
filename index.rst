@@ -202,10 +202,10 @@ How Long Do I Have Access To The Labs?
 
 The lab environments will be available all day Tuesday and Wednesday. The labs will be supported by a team of SMEs during the following periods:
 
-- **Tuesday** - 06:00AM PST - 6:00PM PST
-- **Wednesday** - 06:00AM PST - 12:00PM PST
+- **Tuesday** - 09:00AM AEST - 10:00PM AEST
+- **Wednesday** - 09:00AM AEST - 10:00PM AEST
 
-The lab environments will continue to be available until 9:00PM PST on Wednesday if you wish to continue working on labs after the closing session. SME support and lab validation will end at the beginning of Wednesday's closing session.
+The lab environments will continue to be available until 11:59PM JST on Wednesday if you wish to continue working on labs after the closing session. *SME support and lab validation will be available on a best effort basis after Wednesday's closing session.*
 
 Do I Have To Complete The Lab Tracks In Order?
 ..............................................
@@ -225,11 +225,6 @@ What Happens To The Labs Post-Event?
 ....................................
 
 Following the event, we will be integrating the GTS labs into new and existing Bootcamps for you to drive prospect and customer engagement during 2021.
-
-Generic Looking Frequently Asked Question?
-..........................................
-
-If you're paying attention, come join us in `#﻿readingisfun <slack://channel?team=T0252CLM8&id=C01Q7G18VK6>`_ on Slack.
 
 How Do I Get My Cluster Assignment Info?
 ........................................
